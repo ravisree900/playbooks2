@@ -1,0 +1,18 @@
+---
+ - name: install required s/w's for ci-cd
+   hosts: all
+   tasks:
+     - name: install required softwares
+       apt:
+         name: "{{item.a}}"
+         state: present
+         update_cache: "{{item.b}}"
+       with_items:
+         - {a: openjdk-11-jdk,b: yes}
+         - {a: git,b: no}
+         - {a: maven,b: no}
+         - {a: tomcat9,b: no}
+         - {a: tomcat9-admin,b: no}
+
+...
+

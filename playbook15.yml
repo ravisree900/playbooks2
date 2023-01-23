@@ -1,0 +1,39 @@
+---
+ - name: setup jenkins and required softwares
+   hosts: jenkinsserver
+   tasks: 
+      - name: install required softwares
+        apt:
+          name: "{{item.a}}"
+          state: present
+          update_cache: "{{item.b}}"
+        with_items:
+          - {a: openjdk-11-jdk,b: yes}
+          - {a: git,b: no}
+          - {a: maven,b: no}
+      - name: download jenkins.war
+        get_url:
+            url: https://get.jenkins.io/war-stable/2.375.1/jenkins.war
+            dest: /home/ubuntu
+ - name: install tomcat9 and required s/w's
+   hosts: servers
+   tasks:
+      - name: install required softwares
+        apt: 
+          name: "{{item.a}}"
+          state: present
+          update_cache: "{{item.b}}"
+        with_items:
+          - {a: tomcat9, b: yes}
+          - {a: tomcat9-admin, b: no}
+      - name: copy tomcat-user.xml
+        copy: 
+          src: tomcat-user.xml
+          dest: /etc/tomcat9
+        notify: restart tomcat9
+   handlers:
+     - name: restart tomcat9
+       service: 
+          name: tomcat9
+          state: restarted
+...

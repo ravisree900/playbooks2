@@ -1,0 +1,14 @@
+---
+ - name: configure tomcat9 using child playbooks
+   hosts: all
+   tasks: 
+      - name: call child playbooks
+        include: "{{item}}"
+        with_items: 
+           - install_tomcat9.yml
+           - copy_tomcat.yml
+           - change_port.yml
+           - restart_tomcat.yml
+           - pause.yml
+           - check_tomcat_response.yml
+...

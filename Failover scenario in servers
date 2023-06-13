@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: present
+  - name: Start nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+
+  rescue:
+  - name: Skip failed server
+    debug:
+      msg: "Skipping server {{ ansible_hostname }}"
+...
